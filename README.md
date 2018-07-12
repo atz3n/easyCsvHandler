@@ -18,3 +18,7 @@ dependencies {
     compile 'com.github.Atzen2:easyCsvHandler:v0.1'
 }
 ```
+
+### Manually
+
+[Download](https://github.com/Atzen2/easyCsvHandler/releases) the library
