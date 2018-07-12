@@ -118,8 +118,9 @@ public class EasyCsvHandler {
 	}
 
 	
-	private static int getHeaderIndex(EasyCsvFile csvFile, String headerString) {
-		int headerIndex = 0;
+	
+	public static int getHeaderIndex(EasyCsvFile csvFile, String headerString) {
+		int headerIndex = -1;
 		for(int i = 0 ; i < csvFile.header.length ; i++) {
 			if(csvFile.header[i].equals(headerString)) {
 				headerIndex = i;
@@ -135,6 +136,8 @@ public class EasyCsvHandler {
 	public static List<String[]> findRecords(EasyCsvFile csvFile, int headerIndex, String element) {
 		List<String[]> foundRecords = new ArrayList<>();
 		
+		if(headerIndex < 0 || headerIndex > csvFile.header.length) return foundRecords;
+
 		for(String[] record : csvFile.records) {
 			if(record[headerIndex].equals(element)) {
 				foundRecords.add(record);

@@ -261,4 +261,23 @@ public class EasyCsvHandlerTest {
 			assertTrue("Error in record finding test", false);
 		}
 	}
+	
+	
+	@Test
+	public void testHeaderIndexResolving(){
+		try {
+			int headerIndex = 2;
+			
+			
+			createFile();
+			EasyCsvFile csvFile = parseFile();
+			
+			
+			int foundHeaderIndex = EasyCsvHandler.getHeaderIndex(csvFile, "header[" + headerIndex + "]");
+			assertTrue("Header index should be " + headerIndex, headerIndex == foundHeaderIndex);
+			
+		} catch (Exception e) {
+			assertTrue("Error in header index resolving test", false);
+		}
+	}
 }
