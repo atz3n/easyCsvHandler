@@ -120,9 +120,15 @@ public class EasyCsvHandler {
 	
 	
 	public static int getHeaderIndex(EasyCsvFile csvFile, String headerString) {
+		return getHeaderIndex(csvFile.header, headerString);
+	}
+	
+	
+	
+	public static int getHeaderIndex(String[] header, String headerString) {
 		int headerIndex = -1;
-		for(int i = 0 ; i < csvFile.header.length ; i++) {
-			if(csvFile.header[i].equals(headerString)) {
+		for(int i = 0 ; i < header.length ; i++) {
+			if(header[i].equals(headerString)) {
 				headerIndex = i;
 				break;
 			}

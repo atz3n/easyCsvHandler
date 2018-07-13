@@ -276,6 +276,9 @@ public class EasyCsvHandlerTest {
 			int foundHeaderIndex = EasyCsvHandler.getHeaderIndex(csvFile, "header[" + headerIndex + "]");
 			assertTrue("Header index should be " + headerIndex, headerIndex == foundHeaderIndex);
 			
+			foundHeaderIndex = EasyCsvHandler.getHeaderIndex(csvFile.header, "header[" + headerIndex + "]");
+			assertTrue("Header index should be " + headerIndex, headerIndex == foundHeaderIndex);
+			
 		} catch (Exception e) {
 			assertTrue("Error in header index resolving test", false);
 		}
