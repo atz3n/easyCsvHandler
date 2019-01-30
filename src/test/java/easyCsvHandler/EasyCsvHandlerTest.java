@@ -23,10 +23,12 @@ public class EasyCsvHandlerTest {
 	String[] header = new String[numOfColumns];
 	String[][] records = new String[numOfRecords][numOfColumns];
 	
-	
-	
+	boolean semicolonAsDelimiter = false;
+
+
 	@Before
 	public void init() {
+		semicolonAsDelimiter = false;
 		deleteTestFile();
 		initHeader();
 		initRecords();
@@ -72,16 +74,17 @@ public class EasyCsvHandlerTest {
 			assertTrue("Error in CSV File creation test", false);
 		}
 	}
-	
-	
+
+
 	private void createFile() throws Exception {
 		List<String[]> recordList = new ArrayList<>();
 		for(int i = 0 ; i < numOfRecords ; i++) recordList.add(records[i]);
 
 		EasyCsvHandler handler = new EasyCsvHandler();
 		EasyCsvFile csvFile = new EasyCsvFile(header, recordList);
-		
-		handler.createCsvFile(CSV_FILE, csvFile);
+
+		if(semicolonAsDelimiter) handler.createCsvFile(CSV_FILE, csvFile, ";");
+		else handler.createCsvFile(CSV_FILE, csvFile);
 	}
 	
 	
@@ -131,7 +134,54 @@ public class EasyCsvHandlerTest {
 	
 	private EasyCsvFile parseFile() throws IOException {
 		EasyCsvHandler handler = new EasyCsvHandler();
-		return handler.parseCsvFile(CSV_FILE);
+
+		if(semicolonAsDelimiter) return handler.parseCsvFile(CSV_FILE, ";");
+		else return handler.parseCsvFile(CSV_FILE);
+	}
+
+
+
+	@Test
+	public void testCsvFileParsingWithSemicolonAsDelimiter() {
+		try {
+			boolean testPassed = true;
+			semicolonAsDelimiter = true;
+			createFile();
+
+
+			EasyCsvFile csvFile = parseFile();
+
+
+			if(header.length != csvFile.header.length) testPassed = false;
+
+			for(int i = 0 ; i < csvFile.header.length ; i++) {
+				if(!csvFile.header[i].equals(header[i])) {
+					testPassed = false;
+					break;
+				}
+			}
+
+			assertTrue("Parsed CSV File should have the same header as " + CSV_FILE, testPassed);
+
+
+			for(int i = 0 ; i < numOfRecords ; i++) {
+				String[] parsedRecord = csvFile.records.get(i);
+				String[] setRecord = records[i];
+
+				if(parsedRecord.length != setRecord.length) testPassed = false;
+
+				for(int j = 0 ; j < numOfColumns ; j++) {
+					if(!setRecord[j].equals(parsedRecord[j])) testPassed = false;
+					break;
+				}
+			}
+
+			assertTrue("Parsed CSV File should have the same records as " + CSV_FILE, testPassed);
+
+
+		} catch (Exception e) {
+			assertTrue("Error in CSV File parsing test", false);
+		}
 	}
 	
 	

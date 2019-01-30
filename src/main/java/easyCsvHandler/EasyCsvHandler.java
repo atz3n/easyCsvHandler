@@ -19,19 +19,24 @@ public class EasyCsvHandler {
 	
 	CSVPrinter printer;
 	int numOfHeaderElements = 0;
-	
-	
-	
+
+
 	public void createCsvFile(String filePath, EasyCsvFile csvFile) throws Exception {
-		createFileWithHeader(filePath, csvFile.header);
+		createCsvFile(filePath, csvFile, ",");
+	}
+	
+	public void createCsvFile(String filePath, EasyCsvFile csvFile, String delimiter) throws Exception {
+		createFileWithHeader(filePath, csvFile.header, delimiter.charAt(0));
 		writeRecordsInFile(csvFile.records);
 		closeFile();
 	}
 	
 	
-	private void createFileWithHeader(String filePath, String[] header) throws IOException {
+	private void createFileWithHeader(String filePath, String[] header, char delimiter) throws IOException {
 		BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
-		CSVFormat format = CSVFormat.DEFAULT.withHeader(header);
+		CSVFormat format = CSVFormat.DEFAULT
+				.withHeader(header)
+				.withDelimiter(delimiter);
 		
 		numOfHeaderElements = header.length;
 		printer = new CSVPrinter(writer, format);
@@ -52,17 +57,22 @@ public class EasyCsvHandler {
 		printer.flush();
 	}
 	
-	
+
+	public EasyCsvFile parseCsvFile(String filePath) throws IOException{
+		return parseCsvFile(filePath, ",");
+	}
+
 		
-	public EasyCsvFile parseCsvFile(String filePath) throws IOException {
-		List<String[]> csvTable = parseFile(filePath);
+	public EasyCsvFile parseCsvFile(String filePath, String delimiter) throws IOException {
+		List<String[]> csvTable = parseFile(filePath, delimiter.charAt(0));
 		return new EasyCsvFile(getHeader(csvTable), getRecords(csvTable));
 	}
 	
 	
-	private List<String[]> parseFile(String filePath) throws IOException {
+	private List<String[]> parseFile(String filePath, char delimiter) throws IOException {
 		BufferedReader reader = Files.newBufferedReader(Paths.get(filePath));
 		CSVFormat format = CSVFormat.DEFAULT
+				.withDelimiter(delimiter)
 				.withFirstRecordAsHeader()
 				.withTrim();
 		
