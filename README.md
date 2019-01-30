@@ -15,7 +15,7 @@ repositories {
 }
 ...
 dependencies {
-    compile 'com.github.Atzen2:easyCsvHandler:v0.3'
+    compile 'com.github.Atzen2:easyCsvHandler:v0.4'
 }
 ```
 
